@@ -12,7 +12,7 @@ python3 -m pip install -r requirements.txt
 ## Run Instructions
 Then, to run, do the following:
 ```bash
-uvicorn main:app -reload
+uvicorn main:app --reload
 ```
 And visit http://localhost/docs to see the available endpoints.
 
