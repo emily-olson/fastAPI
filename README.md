@@ -1,4 +1,5 @@
-# This is my tiny fastAPI server project, so I can learn more about APIs, HTTP, etc.
+# FastAPI
+## This is my tiny fastAPI server project, so I can learn more about APIs, HTTP, etc.
 
 ## Setup Instructions
 To get started, follow this setup:
@@ -15,3 +16,7 @@ uvicorn main:app -reload
 ```
 And visit http://localhost/docs to see the available endpoints.
 
+Or, you can run it via Docker.
+```bash 
+docker compose up --build
+```
