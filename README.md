@@ -20,3 +20,6 @@ Or, you can run it via Docker.
 ```bash 
 docker compose up --build
 ```
+
+## AWS EC2
+As a learning exercise, I also deployed my tiny fastAPI to EC2. It was a good learning experience in that I was able to explore the AWS Dashboard, launch and connect to an instance (via the browser), and see my app running on the "rented" AWS IP address. 
