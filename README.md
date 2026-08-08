@@ -43,3 +43,20 @@ Also didn't use Kafka here. But, Kafka is open source software under Apache that
 A "broker" if you ever see that is just a Kafka server (so a machine that runs Kafka software and stores its data) that handles the work of putting messages in a topic, partitioning it, etc. You can have a cluster of brokers so that you can horizontally scale your Kafka for more storage, more throughout, better fault tolerance (you can replicate data across diff brokers). The producer does not decide what broker to use, instead Kafka main server (?) decides what broker this data should go to based on like key hashing or round robin) and also the main server directs a consumer to the right broker when it wants to read data. 
 
 Recently, it's been popular for ML training and Kafka has even said that it can serve ML training without requiring any external storage service like S3, all the data just gets streamed through Kafka that you could need. Idk much about this though. 
+
+## Kubernetes
+I am so tired. Anyways, I should practice deploying something with Kubernetes instead of just reading about it, but I don't have time or the energy. 
+
+What I've learned is that Kubernetes essentially orchestrates running multiple containers (containers being like packaged software) together at once. You could be running many servers with the same container if the container software is heavily used, or you could also be using Kubernetes to run many different types of containers together (ie they work together in some way). It basically handles spinning up all the containers (so you don't have to run docker compose/run for everything single one), starting a new container when one fails, managing what machines are free and can run your container, performing load balances, making little software updates if needed to get containers to run together without crashing/stopping the whole system to make the change, figuring out how to get containers to talk to each other (and which ones are allowed to talk to who).
+
+Also, its not like people necessarily just run Kubernetes on its own. They often use some other service that includes Kubernetes in it, such as AWS EKS. Kubernetes doesn't come built in with networking or security for example. It is just an "OS" that manages different containers ("OS" in quotes because it is similar to how an OS manages different processes, also heard someone say it is like an "OS" for the cloud). Kubernetes allows many computers (nodes) to work together as one. 
+
+That's why the kubernetes logo is the ship steering wheel thing: it manages and runs a whole bunch of containers.
+
+There are some key terms you need to know:
+
+Pod: holds a container (usually one, but sometimes two if the two containers are tightly coupled -- talk directly to each other)
+Node: groups of pods are held on a single machine (virtual or physical)
+Cluster: groups of nodes (ie machines)
+
+Kubernetes figures out what machines to use in an optimal way (take advantage of CPU without killing it). For updates, new images can be pulled and deployed as containers seamlessly. 
