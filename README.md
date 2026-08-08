@@ -24,7 +24,15 @@ docker compose up --build
 ## AWS EC2
 As a learning exercise, I also deployed my tiny fastAPI to EC2. It was a good learning experience in that I was able to explore the AWS Dashboard, launch and connect to an instance (via the browser), and see my app running on the "rented" AWS IP address. 
 
+EC2 is the Elastic Compute Cloud. AWS loans you a server (so they manage the hardware) but you manage all the software: the OS, the networking, the actually software you want to run, etc. You can get like pre-built and confiugured EC2 instances if your app has like settings that are common, but you can also configure it yourself. You pay for the server all the time, even if your app is not actively getting traffic. 
+
 Also, DynamoDB is an AWS service, didn't know that. 
+
+## AWS S3
+The AWS Simple Storage Service. Built for scalability, security, etc. It is now marketing itself as a good storage service for AI training (put all your training data here!). It can store all sorts of data from vectors, to unstructured, to structured data. Comes with data pipelines to feed it back to you. 
+
+## AWS Lambda
+Similar to EC2 except AWS loans you like anonymous servers that you don't get to configure yourself, you just tell Lambda what software you want to run and when ("event sources": what events do you want to trigger this code to run). AWS will only charge you when the software runs, so it can be cheaper. Except you get less customization: you are not responsible for the config of the server. 
 
 ## Redis
 Didn't actually do anything with Redis here, but I wanted to understand what Redis is and where it's actually used. Redis is an in-memory key-value store that supports rich data types (lists, hashes, vectors, etc), low-latency (since accessing from RAM is faster than from disk), and persistence (sort of, it periodically writes to disk and/or keeps a log of writes). It is different than like a disk-based DB's buffer cache that lives in RAM (for example, PostgresSQL has an in-memory buffer cache) in that it doesn't just store like SQL type pages from the disk, which is what PostgresSQL cache is. Rather, it actually stores like application objects that you can define and write/read from Redis. So instead of storing like a page from disk with tables of customer names, you could actually store things like name, time of log in, API calls made in this session, etc (this is like user session data, something Redis is popular for). Redis has been optimized to store all sorts of fancy things and compute fancy operations quickly like sorted sets, expirations (TTLs), etc. 
@@ -52,11 +60,21 @@ What I've learned is that Kubernetes essentially orchestrates running multiple c
 Also, its not like people necessarily just run Kubernetes on its own. They often use some other service that includes Kubernetes in it, such as AWS EKS. Kubernetes doesn't come built in with networking or security for example. It is just an "OS" that manages different containers ("OS" in quotes because it is similar to how an OS manages different processes, also heard someone say it is like an "OS" for the cloud). Kubernetes allows many computers (nodes) to work together as one. 
 
 That's why the kubernetes logo is the ship steering wheel thing: it manages and runs a whole bunch of containers.
+Kubernetes figures out what machines to use in an optimal way (take advantage of CPU without killing it). For updates, new images can be pulled and deployed as containers seamlessly. 
 
 There are some key terms you need to know:
 
-Pod: holds a container (usually one, but sometimes two if the two containers are tightly coupled -- talk directly to each other)
+Container: code, config, dependencies of a program such that it can run as an isolated process on any system
+** kubernetes supports many container running engines, including Docker (which is the most popular but not the only one)
+Pod: holds a container (usually one, but sometimes two if the two containers are tightly coupled -- talk directly to each other). is a single instance of an application
 Node: groups of pods are held on a single machine (virtual or physical)
 Cluster: groups of nodes (ie machines)
 
-Kubernetes figures out what machines to use in an optimal way (take advantage of CPU without killing it). For updates, new images can be pulled and deployed as containers seamlessly. 
+How to actually use it: they have an API (REST) that is often called kubectl (command line interface). People call this like "cube cuttle". Then there are like "operators" that manage the control plane which is what is actually telling the servers what to do. But that's kinda out of scope for not. 
+
+Note that Kubernetes by itself is not really enough. Many organizations also want logging, metrics, automation, CI/CD, etc. So, there are many tools that use Kubernetes as its foundation but then also include all these other services. One example is RedHat OpenShift.
+
+People usually call Kubernetes K8s. K3s is just a lightweight version of Kubernetes that is easier to install and is meant for like smaller production environments. You may only need K8s for large production environments. But it is the same concept and you use the same API and behavior. 
+
+## CI/CD
+This is like pretty obvious but its essentially the idea of continuous integration & continous deployment. So, instead of have many branches of source code merged on like one "merge day" with risks of lots of errors, and also crashing the whole system, changes should be continuously integrated into the application and deployed to users. In order to achieve this, there are DevOps people who are in charge of facilitating the pipeline of developer pushed changes to deployment. This involves tons of automated testing, end to end tests, etc. Essentially, since everyone is making changes that may not only affect the app but also may conflict with someone else's active changes, it is better to continuously integrate and test them so everyone is on the same page. 
